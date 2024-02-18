@@ -1,6 +1,6 @@
-
+import Swal from 'sweetalert2'
 const PostUserData = () => {
-    const handlePostdata =e=>{
+    const  handlePostdata =async (e)=>{
         e.preventDefault ();
         const form = e.target;
         const name = form.name.value;
@@ -9,16 +9,51 @@ const PostUserData = () => {
         const user = {name, email,password};
         console.log(user);
 
-        fetch("/",{
-
+        fetch("http://localhost:5000/users",{
+            method:"POST",
+            headers:{
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify(user)
         })
         .then(res=>res.json())
-        .then(data=>console.log(data))
+        .then(data=>{
+            console.log(data);
+            if(data.insertedId){
+                Swal.fire({
+                    title: "Good job!",
+                    text: "You clicked the button!",
+                    icon: "success"
+                  });
+            }
+        })
+// async
+        // try{
+        //     const res = await fetch("http://localhost:5000/users",{
+        //             method:"POST",
+        //             headers:{
+        //                 "Content-Type": "application/json",
+        //             },
+        //             body: JSON.stringify(user)
+        //         })
+        //         const data = await res.json();
+        //         console.log(data)
+        //         if(data.acknowledged){
+        //             Swal.fire({
+        //                             title: "Good job!",
+        //                             text: "You clicked the button!",
+        //                             icon: "success"
+        //                           });
+        //         }
+        // }
+        // catch(error){
+        //     console.log(error);
+        // }
     }
     return (
-        
+
         <div>
-            <h1 className="text-center text-5xl m-5 font-bold">User </h1>
+            <h1 className="text-center text-5xl m-5 font-bold">Create User: </h1>
 
 
             <form onSubmit={handlePostdata} className="w-1/2 bg-slate-700 h-64 mx-auto flex flex-col items-center" action="">
